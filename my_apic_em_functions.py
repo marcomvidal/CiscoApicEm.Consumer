@@ -8,15 +8,15 @@ requests.packages.urllib3.disable_warnings()
 
 def get_ticket():
     # Composição da requisição
-    url = "https://sandboxapicem.cisco.com/api/v1/ticket"
+    url = ""
 
     headers = {
         "content-type": "application/json"
     }
 
     body = {
-        "username": "devnetuser",
-        "password": "Cisco123!"
+        "username": "",
+        "password": ""
     }
 
     # Envio da requisição
@@ -36,7 +36,7 @@ def get_ticket():
 
 def print_hosts():
     # Composição da requisição
-    url = "https://sandboxapicem.cisco.com/api/v1/host"
+    url = ""
     
     ticket = get_ticket()
     
@@ -71,7 +71,7 @@ def print_hosts():
 
 def print_devices():
     # Composição da requisição
-    url = "https://sandboxapicem.cisco.com/api/v1/network-device"
+    url = ""
     
     ticket = get_ticket()
     
@@ -113,7 +113,7 @@ def print_devices():
 
 def generate_flow_analysis_id():
     # Composição da requisição
-    url = "https://sandboxapicem.cisco.com/api/v1/flow-analysis"
+    url = ""
 
     ticket = get_ticket()
 
@@ -158,7 +158,7 @@ def retrieve_flow_analysis():
     flow_analysis_id = generate_flow_analysis_id()
 
     # Composição da requisição
-    url = "https://sandboxapicem.cisco.com/api/v1/flow-analysis/" + flow_analysis_id
+    url = "" + flow_analysis_id
     
     ticket = get_ticket()
     
