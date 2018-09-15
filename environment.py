@@ -1,0 +1,6 @@
+
+ENDPOINT = ""
+CREDENTIALS = {
+	"username": "",
+	"password": ""
+}
