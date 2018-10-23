@@ -8,7 +8,7 @@ from    exceptions  import *
 class CiscoAPICEM(object):
     """
     Integração com os serviços oferecidos pela API Northbound do Cisco APIC-EM.
-    Interaje com a API. Atente para o correto preenchimento de `environment.py`
+    Interage com a API. Atente para o correto preenchimento de `environment.py`
     para assegurar seu correto funcionamento.
     """
 
@@ -29,7 +29,8 @@ class CiscoAPICEM(object):
             raise CredencialFaltante("Password")
         
         # Desativar warnings de certificados SSL
-        requests.packages.urllib3.disable_warnings()
+        if self.certificado is False:
+            requests.packages.urllib3.disable_warnings()
 
 
     """
@@ -137,10 +138,7 @@ class CiscoAPICEM(object):
             if "ingressInterface" in item:
                 item["inInterface"]  = item["ingressInterface"]["physicalInterface"]["name"]
 
-        return self.__gerar_lista(
-            resposta_curada,
-            atributos_desejados
-        )
+        return self.__gerar_lista(resposta_curada, atributos_desejados)
 
 
     """
@@ -200,6 +198,8 @@ class CiscoAPICEM(object):
     """
     Gera um array com a lista de retorno da API, pronto para ser exibido pela
     biblioteca tabulate.
+    :param   resposta: Obtida após uma chamada com a API através da biblioteca `requests`
+    :param   lista_colunas: Colunas da resposta que se deseja obter
     :return: dict
     """
     def __gerar_lista(self, resposta, lista_colunas):
@@ -220,3 +220,4 @@ class CiscoAPICEM(object):
             lista.append(host)
         
         return lista
+

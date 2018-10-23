@@ -1,5 +1,5 @@
-from	tabulate	import *
-from	environment	import *
+from    tabulate    import *
+from    environment import *
 from    CiscoAPICEM import *
 import  re
 
@@ -15,6 +15,10 @@ class Main(object):
         self.apic_em = CiscoAPICEM()
 
 
+    """
+    Exibe um menu para que o usuário opte pela funcionalidade desejada.
+    :return: void
+    """
     def menu(self):
         while True:
             print("\nInteração com o Cisco APIC-EM via API" +
@@ -122,7 +126,7 @@ class Main(object):
 
         print(tabulate(lista, [
             "No.", "Hostname", "Tipo", "Endereço IP", "Função", "Situação",
-            "Outbound Interface", "Inbound Interface"
+            "Interface de Saída", "Interface de Entrada"
         ]))
 
         self.__continuar()
@@ -159,6 +163,11 @@ class Main(object):
 
         return entrada
 
+    
+    """
+    Aguarda pela entrada através do teclado pelo usuário para continuar a
+    execução.
+    """
     def __continuar(self):
         print("\nPressione qualquer tecla para continuar.")
         input()
