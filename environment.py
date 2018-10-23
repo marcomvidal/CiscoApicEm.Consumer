@@ -10,3 +10,6 @@ CREDENCIAIS = {
 	"username": "",
 	"password": ""
 }
+
+# False para ignorar que o servidor utilize um certificado digital instalado localmente
+CERTIFICADO_DIGITAL = False
