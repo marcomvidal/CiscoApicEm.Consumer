@@ -2,13 +2,17 @@ import	requests
 import	json
 from	tabulate	import *
 from	environment	import *
+from    exceptions  import *
 
 
 class CiscoAPICEM(object):
     """
     Integração com os serviços oferecidos pela API Northbound do Cisco APIC-EM.
+    Interaje com a API. Atente para o correto preenchimento de `environment.py`
+    para assegurar seu correto funcionamento.
     """
     
+
     def __init__(self):
         self.credenciais    = CREDENCIAIS
         self.endpoint       = ENDPOINT
@@ -16,6 +20,14 @@ class CiscoAPICEM(object):
         self.url            = None
         self.service_ticket = None
         self.certificado    = CERTIFICADO_DIGITAL
+
+        if  self.credenciais["username"] is None or \
+            self.credenciais["username"] == "":
+            raise CredencialFaltante("Username")
+
+        if  self.credenciais["password"] is None or \
+            self.credenciais["password"] == "":
+            raise CredencialFaltante("Password")
         
         # Desativar warnings de certificados SSL
         requests.packages.urllib3.disable_warnings()
@@ -33,9 +45,10 @@ class CiscoAPICEM(object):
             json.dumps(self.credenciais),
             headers = self.__gerar_cabecalho(),
             verify  = self.certificado
-		)
+        )
 
-        self.http_status    = resposta.status_code
+        self.__definir_http_status(resposta)
+
         service_ticket = resposta.json()["response"]["serviceTicket"]
 
         return service_ticket
@@ -55,7 +68,7 @@ class CiscoAPICEM(object):
             verify  = self.certificado
         )
         
-        self.http_status    = resposta.status_code
+        self.__definir_http_status(resposta)
         atributos_desejados = ["hostType", "vlanId", "hostIp", "hostMac"]
 
         return self.__gerar_lista(resposta.json()["response"], atributos_desejados)
@@ -75,7 +88,7 @@ class CiscoAPICEM(object):
             verify  = self.certificado
         )
 
-        self.http_status = resposta.status_code
+        self.__definir_http_status(resposta)
 
         atributos_desejados = [
             "serialNumber", "family", "type",
@@ -109,10 +122,11 @@ class CiscoAPICEM(object):
             verify  = self.certificado
         )
 
-        self.http_status = resposta.status_code
+        self.__definir_http_status(resposta)
 
         atributos_desejados = [
-            "name", "type", "ip", "role", "linkInformationSource", "outInterface", "inInterface"
+            "name", "type", "ip", "role", "linkInformationSource",
+            "outInterface", "inInterface"
         ]
 
         resposta_curada = resposta.json()["response"]["networkElementsInfo"]
@@ -152,14 +166,14 @@ class CiscoAPICEM(object):
             verify  = self.certificado
         )
 
-        self.http_status = resposta.status_code
+        self.__definir_http_status(resposta)
 
         return resposta.json()["response"]["flowAnalysisId"]
     
     
     """
     Gera o cabeçalho HTTP para realizar requisições HTTP.
-    :param   service_ticket: Gerado pela API e obtido através do método gerar_service_ticket(). Opcional.
+    :param   service_ticket: Obtido através do método gerar_service_ticket(). Opcional.
     :return: dict
     """
     def __gerar_cabecalho(self, service_ticket = None):
@@ -181,7 +195,7 @@ class CiscoAPICEM(object):
         self.http_status = resposta.status_code
         
         if resposta.status_code != 200:
-            raise Exception("Requisição HTTP falhou. Mensagem: " + resposta.text)
+            raise FalhaRequisicaoHttp(resposta)
     
 
     """

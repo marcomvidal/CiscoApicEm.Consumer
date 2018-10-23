@@ -1,12 +1,15 @@
 from	tabulate	import *
 from	environment	import *
 from    CiscoAPICEM import *
+import  re
 
 
 class Main(object):
     """
-    Exibe os resultados da interação com o Cisco APIC-EM em um aplicativo Console.
+    Interface em modo texto de interação com a API. Pode ser substituída por qualquer outro tipo
+    de interação com o usuário utilizando a classe `CiscoAPIEM`, presente neste projeto.
     """
+
 
     def __init__(self):
         self.apic_em = CiscoAPICEM()
@@ -60,20 +63,12 @@ class Main(object):
     """
     def analisar_trafego(self):
         print("Análise de Tráfego Entre Dispositivos de Rede \n---------------------------------------------")
-        print("\n")
 
-        print("Digite o Endereço IP de origem desta análise: (Ex.: 10.1.2.1)")
-        endereco_origem = input()
-        print("\n")
+        origem = self.__entrada_endereco_ip("Digite o Endereço IP de origem desta análise: (Ex.: 10.1.2.1)")
 
-        print("Digite o Endereço IP de destino desta análise: (Ex.: 10.1.4.2)")
-        endereco_destino = input()
-        print("\n")
+        destino = self.__entrada_endereco_ip("Digite o Endereço IP de destino desta análise: (Ex.: 10.1.4.2)")
 
-        lista = self.apic_em.analisar_trafego(
-            endereco_origem,
-            endereco_destino
-        )
+        lista = self.apic_em.analisar_trafego(origem, destino)
 
         print(tabulate(lista, [
             "No.", "Hostname", "Tipo", "Endereço IP", "Função", "Situação",
@@ -88,5 +83,26 @@ class Main(object):
     def __exibir_http_status(self):
         print("Status da Requisição: " + str(self.apic_em.http_status))
 
+    
+    """
+    Estabelece um meio de validação de endereços IP inseridos pelo usuário.
+    :param   frase:  Frase que será exibida para auxiliar o usuário na entrada de dados
+    :return: str
+    """
+    def __entrada_endereco_ip(self, frase):
+        print(frase)
 
-Main().analisar_trafego()
+        while True:
+            entrada = input()
+            
+            if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", entrada):
+                break
+
+            print("Formato incorreto. Digite um Endereço IP válido.")
+
+        print("\n")
+
+        return entrada
+
+
+Main().listar_dispositivos()
