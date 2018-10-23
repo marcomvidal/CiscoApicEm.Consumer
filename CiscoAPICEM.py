@@ -11,7 +11,6 @@ class CiscoAPICEM(object):
     Interaje com a API. Atente para o correto preenchimento de `environment.py`
     para assegurar seu correto funcionamento.
     """
-    
 
     def __init__(self):
         self.credenciais    = CREDENCIAIS
@@ -194,7 +193,7 @@ class CiscoAPICEM(object):
     def __definir_http_status(self, resposta):
         self.http_status = resposta.status_code
         
-        if resposta.status_code != 200:
+        if resposta.status_code not in [200, 201, 202, 206]:
             raise FalhaRequisicaoHttp(resposta)
     
 

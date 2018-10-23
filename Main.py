@@ -6,27 +6,58 @@ import  re
 
 class Main(object):
     """
-    Interface em modo texto de interação com a API. Pode ser substituída por qualquer outro tipo
-    de interação com o usuário utilizando a classe `CiscoAPIEM`, presente neste projeto.
+    Interface em modo texto de interação com a API. Pode ser substituída 
+    por qualquer outro tipode interação com o usuário utilizando a classe
+    `CiscoAPIEM`, presente neste projeto.
     """
-
 
     def __init__(self):
         self.apic_em = CiscoAPICEM()
 
 
+    def menu(self):
+        while True:
+            print("\nInteração com o Cisco APIC-EM via API" +
+                "\n-------------------------------------\n" +
+                "Escolha a ação desejada: \n\n" +
+                "1. Gerar Service Ticket \n" +
+                "2. Listar Hosts \n" +
+                "3. Listar Dispositivos \n" +
+                "4. Analisar tráfego \n" +
+                "5. Sair \n"
+            )
+
+            try:
+                opcao = int(input("Sua opção: "))
+            except Exception:
+                raise OpcaoInvalida()
+
+            if opcao == 1:
+                self.gerar_service_ticket()
+            elif opcao == 2:
+                self.listar_hosts()
+            elif opcao == 3:
+                self.listar_dispositivos()
+            elif opcao == 4:
+                self.analisar_trafego()
+            else:
+                break
+
+
     """
-    Gera e exibe o Service Ticket (API Token), necessário para a realização de todas as transações.
-    :return: str
+    Gera e exibe o Service Ticket (API Token), necessário para a
+    realização de todas as transações.
+    :return: void
     """
     def gerar_service_ticket(self):
         service_ticket = self.apic_em.gerar_service_ticket()
 
-        print("Geração do Service Ticket \n-------------------------")
+        print("\nGeração do Service Ticket" +
+            "\n-------------------------")
+
         self.__exibir_http_status()
         print("Service Ticket: " + service_ticket + "\n")
-
-        return service_ticket
+        self.__continuar()
 
 
     """
@@ -36,9 +67,16 @@ class Main(object):
     def listar_hosts(self):
         lista = self.apic_em.listar_hosts()
 
-        print("Exibição da Lista de Hosts \n--------------------------")
+        print("\nExibição da Lista de Hosts" + 
+            "\n--------------------------")
+        
         self.__exibir_http_status()
-        print(tabulate(lista, ["No.", "Tipo", "VLAN", "Endereço IP", "Endereço MAC"]))
+
+        print(tabulate(lista, [
+            "No.", "Tipo", "VLAN", "Endereço IP", "Endereço MAC"]
+        ))
+
+        self.__continuar()
 
 
     """
@@ -48,7 +86,9 @@ class Main(object):
     def listar_dispositivos(self):
         lista = self.apic_em.listar_dispositivos()
 
-        print("Exibição da Lista de Ativos de Rede \n--------------------------")
+        print("\nExibição da Lista de Ativos de Rede" +
+            "\n-----------------------------------")
+
         self.__exibir_http_status()
 
         print(tabulate(lista, [
@@ -56,24 +96,36 @@ class Main(object):
             "Hostname", "MAC Address", "IP de Gerenciamento"
         ]))
 
+        self.__continuar()
+
 
     """
-    Realiza todos os procedimentos necessários para analisar o tráfego entre dois dispositivos da rede.
+    Realiza todos os procedimentos necessários para analisar o tráfego
+    entre dois dispositivos da rede.
     :return: void
     """
     def analisar_trafego(self):
-        print("Análise de Tráfego Entre Dispositivos de Rede \n---------------------------------------------")
+        print("\nAnálise de Tráfego Entre Dispositivos de Rede" +
+            "\n---------------------------------------------")
 
-        origem = self.__entrada_endereco_ip("Digite o Endereço IP de origem desta análise: (Ex.: 10.1.2.1)")
+        origem = self.__entrada_endereco_ip(
+            "Digite o Endereço IP de origem desta análise: (Ex.: 10.1.2.1)"
+        )
 
-        destino = self.__entrada_endereco_ip("Digite o Endereço IP de destino desta análise: (Ex.: 10.1.4.2)")
+        destino = self.__entrada_endereco_ip(
+            "Digite o Endereço IP de destino desta análise: (Ex.: 10.1.4.2)"
+        )
 
         lista = self.apic_em.analisar_trafego(origem, destino)
+
+        self.__exibir_http_status()
 
         print(tabulate(lista, [
             "No.", "Hostname", "Tipo", "Endereço IP", "Função", "Situação",
             "Outbound Interface", "Inbound Interface"
         ]))
+
+        self.__continuar()
 
     
     """
@@ -81,12 +133,15 @@ class Main(object):
     :return: void
     """
     def __exibir_http_status(self):
-        print("Status da Requisição: " + str(self.apic_em.http_status))
+        print("Status da Requisição: " + 
+            str(self.apic_em.http_status) + "\n")
 
     
     """
-    Estabelece um meio de validação de endereços IP inseridos pelo usuário.
-    :param   frase:  Frase que será exibida para auxiliar o usuário na entrada de dados
+    Estabelece um meio de validação de endereços IP inseridos
+    pelo usuário.
+    :param   frase:  Frase que será exibida para auxiliar o usuário
+    na entrada de dados
     :return: str
     """
     def __entrada_endereco_ip(self, frase):
@@ -104,5 +159,9 @@ class Main(object):
 
         return entrada
 
+    def __continuar(self):
+        print("\nPressione qualquer tecla para continuar.")
+        input()
 
-Main().listar_dispositivos()
+
+Main().menu()
