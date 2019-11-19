@@ -1,5 +1,6 @@
 CiscoAPICEM.pyproj
 environment.py
 __pycache__/
+CiscoAPICEM/
 .gitignore
 .vscode
