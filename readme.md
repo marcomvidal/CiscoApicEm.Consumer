@@ -1,4 +1,4 @@
-# Cisco APIC-EM - Interação com a API
+# Cisco APIC-EM - Interação com API REST
 
 ## Descrição
 Biblioteca que realiza chamadas com a API REST do Cisco APIC-EM. Gera Service Tickets, lista hosts e dispositivos, analisa tráfego e exibe seus resultados. Inclui um Front-End em Console para fácil apreciação e análise das consultas disponíveis.
