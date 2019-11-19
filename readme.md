@@ -56,3 +56,8 @@ Basta chamar `Main.py` através do `python` em seu shell preferido. Será exibid
 
 ### B. Integrando com uma Aplicação Existente
 Observe a implementação existente em `Main.py` e adapte-a às suas necessidades. Observe que todas as requisições dependem de um Service Ticket que já tem sua obtenção implementada em cada uma das chamadas de `CiscoAPICEM.py`.
+
+## Screenshots
+* [Listagem de hosts](https://raw.githubusercontent.com/marcomvidal/CiscoAPIC-EM/master/screenshot_hosts.png)
+* [Listagem de ativos de rede](https://raw.githubusercontent.com/marcomvidal/CiscoAPIC-EM/master/screenshot_dispositivos.png)
+* [Teste de tráfego](https://raw.githubusercontent.com/marcomvidal/CiscoAPIC-EM/master/screenshot_trafego.png)
