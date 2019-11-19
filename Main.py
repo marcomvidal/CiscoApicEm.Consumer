@@ -1,3 +1,4 @@
+# coding: utf-8
 from    tabulate    import *
 from    environment import *
 from    CiscoAPICEM import *
@@ -7,7 +8,7 @@ import  re
 class Main(object):
     """
     Interface em modo texto de interação com a API. Pode ser substituída 
-    por qualquer outro tipode interação com o usuário utilizando a classe
+    por qualquer outro tipo de interação com o usuário utilizando a classe
     `CiscoAPIEM`, presente neste projeto.
     """
 
